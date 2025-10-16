@@ -1,3 +1,7 @@
+create database big_market;
+
+use big_market;
+
 create table award
 (
     id           int auto_increment comment '自增ID'

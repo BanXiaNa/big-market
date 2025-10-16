@@ -1,3 +1,5 @@
+use big_market;
+
 create table strategy
 (
     id            int auto_increment comment '自增ID'

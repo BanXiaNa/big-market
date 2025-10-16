@@ -1,3 +1,5 @@
+use big_market;
+
 create table strategy_award
 (
     id                  int auto_increment comment '自增ID'
