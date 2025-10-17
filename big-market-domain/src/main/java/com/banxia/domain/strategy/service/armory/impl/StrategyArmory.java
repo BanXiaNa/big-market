@@ -55,16 +55,6 @@ public class StrategyArmory implements IStrategyArmory {
         strategyAwardRepository.saveStrategyAwardMap(strategyId, awardIdCountMap);
     }
 
-    @Override
-    public Integer getRandomAwardId(Long strategyId) {
-        // 获取概率范围
-        Integer range = strategyRepository.queryStrategyRange(strategyId);
-        // 生成随机值
-        Integer randomKey = new SecureRandom().nextInt(range);
-        // 返回结果
-        return strategyAwardRepository.queryRandomStrategyAwardId(strategyId, randomKey);
-    }
-
     private Integer getTotalAwardRate(List<StrategyAwardEntity> awardList) {
         Integer total = 0;
         for (StrategyAwardEntity strategyAwardEntity : awardList) {
