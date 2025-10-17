@@ -24,7 +24,7 @@ public interface IStrategyAwardRepository {
      * @param strategyId 策略ID
      * @param awardIdCountMap 奖品ID-奖品数量
      */
-    void saveStrategyAwardMap(Long strategyId, Map<Integer, Integer> awardIdCountMap);
+    void saveStrategyAwardMap(String key, Map<Integer, Integer> awardIdCountMap);
 
 
     /**
@@ -33,5 +33,5 @@ public interface IStrategyAwardRepository {
      * @param randomKey 随机数
      * @return 策略奖品ID
      */
-    Integer queryRandomStrategyAwardId(Long strategyId, Integer randomKey);
+    Integer queryRandomStrategyAwardId(String strategyId, Integer randomKey);
 }

@@ -1,5 +1,7 @@
 package com.banxia.domain.strategy.repository;
 
+import com.banxia.domain.strategy.model.entity.StrategyEntity;
+
 import java.util.Map;
 
 /**
@@ -14,13 +16,19 @@ public interface IStrategyRepository {
      * @param strategyId 策略ID
      * @param range 策略范围
      */
-    void saveStrategyRange(Long strategyId, Integer range);
+    void saveStrategyRange(String key, Integer range);
 
     /**
      * 获取策略范围
-     * @param strategyId 策略ID
+     * @param key 策略key
      * @return 策略范围
      */
-    Integer queryStrategyRange(Long strategyId);
+    Integer queryStrategyRange(String key);
 
+    /**
+     * 获取策略实体
+     * @param strategyId 策略ID
+     * @return 策略实体
+     */
+    StrategyEntity queryStrategyEntityByStrategyId(Long strategyId);
 }

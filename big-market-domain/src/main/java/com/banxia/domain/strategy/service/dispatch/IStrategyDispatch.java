@@ -8,9 +8,17 @@ package com.banxia.domain.strategy.service.dispatch;
 public interface IStrategyDispatch {
 
     /**
-     * 获取策略奖品
+     * 根据策略ID获取策略奖品
      * @param strategyId 策略ID
      * @return 奖品ID
      */
     Integer getRandomAwardId(Long strategyId);
+
+    /**
+     * 根据策略ID和权重值获取策略奖品
+     * @param strategyId 策略ID
+     * @param ruleWeightValue 策略权重值
+     * @return 奖品ID
+     */
+    Integer getRandomAwardId(Long strategyId, String ruleWeightValue);
 }

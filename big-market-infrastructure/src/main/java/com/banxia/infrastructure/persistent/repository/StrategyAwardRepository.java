@@ -49,16 +49,16 @@ public class StrategyAwardRepository implements IStrategyAwardRepository {
     }
 
     @Override
-    public void saveStrategyAwardMap(Long strategyId, Map<Integer, Integer> awardIdCountMap) {
-        String cacheKey = Constants.RedisKey.STRATEGY_AWARD_LIST_KEY + strategyId;
+    public void saveStrategyAwardMap(String key, Map<Integer, Integer> awardIdCountMap) {
+        String redisKey = Constants.RedisKey.STRATEGY_RATE_TABLE_KEY + key;
 
-        RMap<Object, Object> map = redisService.getMap(cacheKey);
+        RMap<Object, Object> map = redisService.getMap(redisKey);
         map.putAll(awardIdCountMap);
 
     }
 
     @Override
-    public Integer queryRandomStrategyAwardId(Long strategyId, Integer randomKey) {
-        return redisService.getFromMap(Constants.RedisKey.STRATEGY_AWARD_LIST_KEY + strategyId, randomKey);
+    public Integer queryRandomStrategyAwardId(String strategyId, Integer randomKey) {
+        return redisService.getFromMap(Constants.RedisKey.STRATEGY_RATE_TABLE_KEY + strategyId, randomKey);
     }
 }

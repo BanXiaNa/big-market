@@ -21,7 +21,7 @@ public class ApiTest {
     private IStrategyDispatch strategyDispatch;
 
     @Test
-    public void test1() {
+    public void test1() throws IllegalAccessException {
 
         strategyArmory.assembleLotteryStrategy(10001L);
 
