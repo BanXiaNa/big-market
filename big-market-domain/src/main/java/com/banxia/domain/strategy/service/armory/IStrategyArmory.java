@@ -11,12 +11,6 @@ public interface IStrategyArmory {
      * 装配策略
      * @param strategyId 策略ID
      */
-    void assembleLotteryStrategy(Long strategyId);
+    void assembleLotteryStrategy(Long strategyId) throws IllegalAccessException;
 
-    /**
-     * 获取策略奖品
-     * @param strategyId 策略ID
-     * @return 奖品ID
-     */
-    Integer getRandomAwardId(Long strategyId);
 }

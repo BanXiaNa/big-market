@@ -1,5 +1,6 @@
 package com.banxia.infrastructure.persistent.dao;
 
+import com.banxia.infrastructure.persistent.po.StrategyRule;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -9,4 +10,10 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface IStrategyRuleDao {
+    /**
+     * 查询策略规则
+     * @param req 查询参数
+     * @return 策略规则
+     */
+    StrategyRule queryStrategyRule(StrategyRule req);
 }

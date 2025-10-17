@@ -1,6 +1,10 @@
 package com.banxia.infrastructure.persistent.repository;
 
+import com.banxia.domain.strategy.model.entity.StrategyEntity;
 import com.banxia.domain.strategy.repository.IStrategyRepository;
+import com.banxia.infrastructure.converter.StrategyMapping;
+import com.banxia.infrastructure.persistent.dao.IStrategyDao;
+import com.banxia.infrastructure.persistent.po.Strategy;
 import com.banxia.infrastructure.persistent.redis.IRedisService;
 import com.banxia.types.common.Constants;
 import org.springframework.stereotype.Repository;
@@ -19,15 +23,37 @@ public class StrategyRepository implements IStrategyRepository {
     @Resource
     private IRedisService redisService;
 
+    @Resource
+    private StrategyMapping strategyMapping;
+
+    @Resource
+    private IStrategyDao strategyDao;
+
     @Override
-    public void saveStrategyRange(Long strategyId, Integer range) {
-        String key = Constants.RedisKey.STRATEGY_RATE_RANGE_KEY + strategyId;
-        redisService.setValue(key, range);
+    public void saveStrategyRange(String key, Integer range) {
+        String redisKey = Constants.RedisKey.STRATEGY_RATE_RANGE_KEY + key;
+        redisService.setValue(redisKey, range);
     }
 
     @Override
-    public Integer queryStrategyRange(Long strategyId) {
-        String key = Constants.RedisKey.STRATEGY_RATE_RANGE_KEY + strategyId;
-        return redisService.getValue(key);
+    public Integer queryStrategyRange(String key) {
+        String redisKey = Constants.RedisKey.STRATEGY_RATE_RANGE_KEY + key;
+        return redisService.getValue(redisKey);
+    }
+
+    @Override
+    public StrategyEntity queryStrategyEntityByStrategyId(Long strategyId) {
+
+        String redisKey = Constants.RedisKey.STRATEGY_KEY + strategyId;
+        StrategyEntity strategyEntity = redisService.getValue(redisKey);
+        if(null != strategyEntity){
+            return strategyEntity;
+        }
+
+        Strategy strategy = strategyDao.queryStrategyEntityByStrategyId(strategyId);
+        strategyEntity = strategyMapping.sourceToTarget(strategy);
+        redisService.setValue(redisKey, strategyEntity);
+
+        return strategyEntity;
     }
 }

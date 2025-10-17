@@ -1,5 +1,6 @@
 package com.banxia.infrastructure.persistent.dao;
 
+import com.banxia.infrastructure.persistent.po.Strategy;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -9,4 +10,10 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface IStrategyDao {
+    /**
+     * 根据策略ID查询策略
+     * @param strategyId 策略ID
+     * @return 策略
+     */
+    Strategy queryStrategyEntityByStrategyId(Long strategyId);
 }
