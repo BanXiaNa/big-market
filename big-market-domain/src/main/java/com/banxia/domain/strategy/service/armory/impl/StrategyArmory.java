@@ -5,13 +5,14 @@ import com.banxia.domain.strategy.repository.IStrategyAwardRepository;
 import com.banxia.domain.strategy.repository.IStrategyRepository;
 import com.banxia.domain.strategy.service.armory.IStrategyArmory;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.*;
+
+import static com.google.common.math.IntMath.gcd;
 
 /**
  * @Author BanXia
@@ -33,28 +34,58 @@ public class StrategyArmory implements IStrategyArmory {
         // 获取策略奖品信息
         List<StrategyAwardEntity> awardList = strategyAwardRepository.queryStrategyAwardList(strategyId);
 
-        List<Integer> awardIdList = new ArrayList<>();
-        for (StrategyAwardEntity strategyAwardEntity : awardList) {
-            BigDecimal awardRate = strategyAwardEntity.getAwardRate();
-            int intValue = awardRate.multiply(new BigDecimal(10000)).intValue();
-            for(int i = 0; i < intValue; i++) {
-                awardIdList.add(strategyAwardEntity.getAwardId());
-            }
-        }
+        // 最大公因数用于缩短概率映射长度
+        Integer gcdAwardRate = getGcdAwardRate(awardList);
+        Integer totalAwardRate = getTotalAwardRate(awardList);
 
+        // 获取概率范围
+        Integer range = totalAwardRate / gcdAwardRate;
+        // 计算概率映射
         Map<Integer, Integer> awardIdCountMap = new HashMap<>();
-        for(int i = 0; i < 10000; i++) {
-            awardIdCountMap.put(i, awardIdList.get(i));
+        Integer start = 0;
+        for (StrategyAwardEntity strategyAwardEntity : awardList) {
+            Integer awardRate = strategyAwardEntity.getAwardRate().multiply(BigDecimal.valueOf(10000)).intValue();
+            for(int i = start;i < start + (awardRate / gcdAwardRate); i++){
+                awardIdCountMap.put(i, strategyAwardEntity.getAwardId());
+            }
+            start += (awardRate / gcdAwardRate);
         }
-
+        // 存储
+        strategyRepository.saveStrategyRange(strategyId, range);
         strategyAwardRepository.saveStrategyAwardMap(strategyId, awardIdCountMap);
     }
 
     @Override
     public Integer getRandomAwardId(Long strategyId) {
-        SecureRandom random = new SecureRandom();
-        Integer randomKey = random.nextInt(10000);
-
+        // 获取概率范围
+        Integer range = strategyRepository.queryStrategyRange(strategyId);
+        // 生成随机值
+        Integer randomKey = new SecureRandom().nextInt(range);
+        // 返回结果
         return strategyAwardRepository.queryRandomStrategyAwardId(strategyId, randomKey);
     }
+
+    private Integer getTotalAwardRate(List<StrategyAwardEntity> awardList) {
+        Integer total = 0;
+        for (StrategyAwardEntity strategyAwardEntity : awardList) {
+            total += strategyAwardEntity.getAwardRate().multiply(BigDecimal.valueOf(10000)).intValue();
+        }
+        return total;
+    }
+
+    private Integer getGcdAwardRate(List<StrategyAwardEntity> awardList) {
+
+        // 最大公因数用于缩短概率映射长度
+        List<Integer> gcdList = new ArrayList<>();
+        for (StrategyAwardEntity strategyAwardEntity : awardList) {
+            gcdList.add(strategyAwardEntity.getAwardRate().multiply(BigDecimal.valueOf(10000)).intValue());
+        }
+
+        Integer gcd = gcdList.get(0);
+        for (int i = 1; i < gcdList.size(); i++) {
+            gcd = gcd(gcd, gcdList.get(i));
+        }
+        return gcd;
+    }
+
 }

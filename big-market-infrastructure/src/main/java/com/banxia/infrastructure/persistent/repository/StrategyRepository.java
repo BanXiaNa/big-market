@@ -2,6 +2,7 @@ package com.banxia.infrastructure.persistent.repository;
 
 import com.banxia.domain.strategy.repository.IStrategyRepository;
 import com.banxia.infrastructure.persistent.redis.IRedisService;
+import com.banxia.types.common.Constants;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -18,4 +19,15 @@ public class StrategyRepository implements IStrategyRepository {
     @Resource
     private IRedisService redisService;
 
+    @Override
+    public void saveStrategyRange(Long strategyId, Integer range) {
+        String key = Constants.RedisKey.STRATEGY_RATE_RANGE_KEY + strategyId;
+        redisService.setValue(key, range);
+    }
+
+    @Override
+    public Integer queryStrategyRange(Long strategyId) {
+        String key = Constants.RedisKey.STRATEGY_RATE_RANGE_KEY + strategyId;
+        return redisService.getValue(key);
+    }
 }

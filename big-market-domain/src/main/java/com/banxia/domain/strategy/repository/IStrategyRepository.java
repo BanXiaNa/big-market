@@ -8,4 +8,19 @@ import java.util.Map;
  * @Date 2025/10/17 02:26
  */
 public interface IStrategyRepository {
+
+    /**
+     * 保存策略范围
+     * @param strategyId 策略ID
+     * @param range 策略范围
+     */
+    void saveStrategyRange(Long strategyId, Integer range);
+
+    /**
+     * 获取策略范围
+     * @param strategyId 策略ID
+     * @return 策略范围
+     */
+    Integer queryStrategyRange(Long strategyId);
+
 }
