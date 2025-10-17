@@ -23,18 +23,17 @@ public class StrategyDispatch implements IStrategyDispatch {
 
     @Override
     public Integer getRandomAwardId(Long strategyId) {
-        // 获取概率范围
-        Integer range = strategyRepository.queryStrategyRange(String.valueOf(strategyId));
-        // 生成随机值
-        Integer randomKey = new SecureRandom().nextInt(range);
-        // 返回结果
-        return strategyAwardRepository.queryRandomStrategyAwardId(String.valueOf(strategyId), randomKey);
+        return getRandomAwardId(strategyId.toString());
     }
 
     @Override
     public Integer getRandomAwardId(Long strategyId, String ruleWeightValue) {
 
         String redisKey = strategyId + "_" + ruleWeightValue;
+        return getRandomAwardId(redisKey);
+    }
+
+    private Integer getRandomAwardId(String redisKey){
         // 获取概率范围
         Integer range = strategyRepository.queryStrategyRange(redisKey);
         // 生成随机值
