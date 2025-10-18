@@ -49,8 +49,23 @@ public class StrategyRuleRepository implements IStrategyRuleRepository {
         redisService.setValue(redisKey, strategyRuleEntity);
 
         return strategyRuleEntity;
+    }
 
+    @Override
+    public String queryStrategyRuleValue(Long strategyId, Integer awardId, String ruleModel) {
+        String redisKey = Constants.RedisKey.STRATEGY_RULE_WEIGHT_KEY + strategyId + "_" + (awardId == null ? "" : (awardId + "_")) + ruleModel;
+        String ruleValue = redisService.getValue(redisKey);
+        if(null != ruleValue) {
+            return ruleValue;
+        }
 
-
+        StrategyRule req = StrategyRule.builder()
+                .strategyId(strategyId)
+                .awardId(awardId)
+                .ruleModel(ruleModel)
+                .build();
+        ruleValue = strategyRuleDao.queryStrategyRuleValue(req);
+        redisService.setValue(redisKey, ruleValue);
+        return ruleValue;
     }
 }

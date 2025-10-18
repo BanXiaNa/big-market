@@ -16,4 +16,13 @@ public interface IStrategyRuleRepository {
      * @return 策略规则
      */
     StrategyRuleEntity queryStrategyRuleEntityByStrategyIdAndRuleModel(Long strategyId, String ruleModel);
+
+    /**
+     * 根据策略ID、奖品ID和规则模型查询策略规则值
+     * @param strategyId 策略ID
+     * @param awardId 奖品ID
+     * @param ruleModel 策略模型
+     * @return 策略规则值
+     */
+    String queryStrategyRuleValue(Long strategyId, Integer awardId, String ruleModel);
 }

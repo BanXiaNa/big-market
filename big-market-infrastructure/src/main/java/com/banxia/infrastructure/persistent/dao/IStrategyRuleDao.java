@@ -16,4 +16,11 @@ public interface IStrategyRuleDao {
      * @return 策略规则
      */
     StrategyRule queryStrategyRule(StrategyRule req);
+
+    /**
+     * 查询策略规则值
+     * @param req 查询参数
+     * @return 策略规则值
+     */
+    String queryStrategyRuleValue(StrategyRule req);
 }
