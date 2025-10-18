@@ -10,7 +10,7 @@ import java.security.SecureRandom;
 
 /**
  * @Author BanXia
- * @description:
+ * @description: 抽奖实现
  * @Date 2025/10/17 14:44
  */
 @Service

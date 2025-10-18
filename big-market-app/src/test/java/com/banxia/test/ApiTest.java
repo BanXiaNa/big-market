@@ -1,7 +1,10 @@
 package com.banxia.test;
 
+import com.banxia.domain.strategy.model.entity.RaffleAwardEntity;
+import com.banxia.domain.strategy.model.entity.RaffleFactorEntity;
 import com.banxia.domain.strategy.service.armory.IStrategyArmory;
 import com.banxia.domain.strategy.service.dispatch.IStrategyDispatch;
+import com.banxia.domain.strategy.service.raffle.IRaffleStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,24 +19,17 @@ import javax.annotation.Resource;
 public class ApiTest {
 
     @Resource
-    private IStrategyArmory strategyArmory;
-    @Resource
-    private IStrategyDispatch strategyDispatch;
+    private IRaffleStrategy raffleStrategy;
 
     @Test
-    public void test1() throws IllegalAccessException {
+    public void test() {
 
-        strategyArmory.assembleLotteryStrategy(10001L);
+        RaffleFactorEntity req = RaffleFactorEntity.builder()
+                .userId("userId")
+                .strategyId(10001L)
+                .build();
 
-    }
-
-
-    @Test
-    public void test2() {
-
-        for(int i = 0; i < 100; i++){
-            System.out.println(strategyDispatch.getRandomAwardId(10001L));
-        }
-
+        RaffleAwardEntity raffleAwardEntity = raffleStrategy.performRaffle(req);
+        System.out.println(raffleAwardEntity.getAwardId());
     }
 }
